@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tuesday Exam Schedule</title>
+    <title>Tuesday Exam Schedule - Second Lunch with Timer</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -30,11 +30,17 @@
         .highlight {
             background-color: #ffeb3b;
         }
+        #timer {
+            font-size: 24px;
+            margin-bottom: 20px;
+            color: #333;
+        }
     </style>
 </head>
 <body>
 
-<h2>Tuesday - 5/20/25 (Full Day)</h2>
+<h2>Tuesday - 5/20/25 (Full Day) - Second Lunch Schedule</h2>
+<div id="timer"></div>
 
 <table>
     <tr>
@@ -53,13 +59,9 @@
         <td>Period 3 Exam</td>
         <td>9:00 am - 10:40 am</td>
     </tr>
-    <tr id="lunch1">
-        <td>1st Lunch</td>
-        <td>10:45 am - 11:15 am</td>
-    </tr>
     <tr id="period5">
         <td>Period 5</td>
-        <td>11:20 am - 12:15 pm</td>
+        <td>10:45 am - 11:45 am</td>
     </tr>
     <tr id="lunch2">
         <td>2nd Lunch</td>
@@ -77,8 +79,7 @@ function highlightCurrentPeriod() {
         {id: "period1", start: "07:00", end: "08:40"},
         {id: "break", start: "08:40", end: "09:00"},
         {id: "period3", start: "09:00", end: "10:40"},
-        {id: "lunch1", start: "10:45", end: "11:15"},
-        {id: "period5", start: "11:20", end: "12:15"},
+        {id: "period5", start: "10:45", end: "11:45"},
         {id: "lunch2", start: "11:45", end: "12:15"},
         {id: "period7", start: "12:20", end: "13:11"},
     ];
@@ -96,8 +97,27 @@ function highlightCurrentPeriod() {
     });
 }
 
-setInterval(highlightCurrentPeriod, 60000); // Update every minute
+function updateTimer() {
+    const endTime = new Date();
+    endTime.setHours(10, 40, 0); // Period 3 ends at 10:40 AM
+
+    const now = new Date();
+    const diff = endTime - now;
+
+    if (diff > 0) {
+        const minutes = Math.floor(diff / 60000);
+        const seconds = Math.floor((diff % 60000) / 1000);
+        document.getElementById('timer').textContent = `Time remaining for Period 3 Exam: ${minutes}m ${seconds}s`;
+    } else {
+        document.getElementById('timer').textContent = "Period 3 Exam has ended.";
+    }
+}
+
+setInterval(highlightCurrentPeriod, 60000);
+setInterval(updateTimer, 1000);
+
 highlightCurrentPeriod();
+updateTimer();
 </script>
 
 </body>
