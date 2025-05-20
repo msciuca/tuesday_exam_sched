@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tuesday Exam Schedule</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            text-align: center;
+            padding: 20px;
+        }
+        table {
+            margin: 0 auto;
+            border-collapse: collapse;
+            width: 80%;
+        }
+        th, td {
+            padding: 10px;
+            border: 1px solid #ddd;
+        }
+        th {
+            background-color: #b22222;
+            color: white;
+        }
+        td {
+            background-color: white;
+        }
+        .highlight {
+            background-color: #ffeb3b;
+        }
+    </style>
+</head>
+<body>
+
+<h2>Tuesday - 5/20/25 (Full Day)</h2>
+
+<table>
+    <tr>
+        <th>Period</th>
+        <th>Time</th>
+    </tr>
+    <tr id="period1">
+        <td>Period 1 Exam</td>
+        <td>7:00 am - 8:40 am</td>
+    </tr>
+    <tr id="break">
+        <td>Break/Grad Walk</td>
+        <td>8:40 am - 9:00 am</td>
+    </tr>
+    <tr id="period3">
+        <td>Period 3 Exam</td>
+        <td>9:00 am - 10:40 am</td>
+    </tr>
+    <tr id="lunch1">
+        <td>1st Lunch</td>
+        <td>10:45 am - 11:15 am</td>
+    </tr>
+    <tr id="period5">
+        <td>Period 5</td>
+        <td>11:20 am - 12:15 pm</td>
+    </tr>
+    <tr id="lunch2">
+        <td>2nd Lunch</td>
+        <td>11:45 am - 12:15 pm</td>
+    </tr>
+    <tr id="period7">
+        <td>Period 7</td>
+        <td>12:20 pm - 1:11 pm</td>
+    </tr>
+</table>
+
+<script>
+function highlightCurrentPeriod() {
+    const periods = [
+        {id: "period1", start: "07:00", end: "08:40"},
+        {id: "break", start: "08:40", end: "09:00"},
+        {id: "period3", start: "09:00", end: "10:40"},
+        {id: "lunch1", start: "10:45", end: "11:15"},
+        {id: "period5", start: "11:20", end: "12:15"},
+        {id: "lunch2", start: "11:45", end: "12:15"},
+        {id: "period7", start: "12:20", end: "13:11"},
+    ];
+
+    const now = new Date();
+    const currentTime = now.getHours().toString().padStart(2, '0') + ":" + now.getMinutes().toString().padStart(2, '0');
+
+    periods.forEach(period => {
+        const elem = document.getElementById(period.id);
+        elem.classList.remove("highlight");
+
+        if (currentTime >= period.start && currentTime <= period.end) {
+            elem.classList.add("highlight");
+        }
+    });
+}
+
+setInterval(highlightCurrentPeriod, 60000); // Update every minute
+highlightCurrentPeriod();
+</script>
+
+</body>
+</html>
