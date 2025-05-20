@@ -5,35 +5,64 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tuesday Exam Schedule - Second Lunch with Timer</title>
     <style>
+        :root {
+            --clr-bg: #f0f4f8;
+            --clr-primary: #6cbf7f;
+            --clr-warning: #ffd95e;
+            --clr-danger: #f25c54;
+            --clr-text: #2a2a2a;
+            --clr-accent: #ffffff;
+            --radius: 0.75rem;
+            --transition: 0.3s;
+        }
         body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
+            font-family: 'Inter', sans-serif;
+            background-color: var(--clr-bg);
+            color: var(--clr-text);
             text-align: center;
-            padding: 20px;
+            padding: 2rem;
+        }
+        h2 {
+            font-family: 'Fredoka', sans-serif;
+            color: var(--clr-primary);
+            font-size: 2rem;
+        }
+        #timer {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            color: var(--clr-text);
         }
         table {
             margin: 0 auto;
             border-collapse: collapse;
-            width: 80%;
+            width: 90%;
+            background-color: var(--clr-accent);
+            border-radius: var(--radius);
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
         }
         th, td {
-            padding: 10px;
-            border: 1px solid #ddd;
+            padding: 1rem;
+            border-bottom: 1px solid #ddd;
         }
         th {
             background-color: #b22222;
             color: white;
         }
-        td {
-            background-color: white;
-        }
         .highlight {
-            background-color: #ffeb3b;
+            background-color: var(--clr-warning);
         }
-        #timer {
-            font-size: 24px;
-            margin-bottom: 20px;
-            color: #333;
+        .progress-bar {
+            background-color: #e0e4e8;
+            border-radius: var(--radius);
+            overflow: hidden;
+            height: 1.25rem;
+        }
+        .progress {
+            height: 100%;
+            width: 0;
+            background-color: var(--clr-primary);
+            transition: width 1s linear;
         }
     </style>
 </head>
@@ -46,30 +75,37 @@
     <tr>
         <th>Period</th>
         <th>Time</th>
+        <th>Progress</th>
     </tr>
     <tr id="period1">
         <td>Period 1 Exam</td>
         <td>7:00 am - 8:40 am</td>
+        <td><div class="progress-bar"><div class="progress" id="bar-period1"></div></div></td>
     </tr>
     <tr id="break">
         <td>Break/Grad Walk</td>
         <td>8:40 am - 9:00 am</td>
+        <td><div class="progress-bar"><div class="progress" id="bar-break"></div></div></td>
     </tr>
     <tr id="period3">
         <td>Period 3 Exam</td>
         <td>9:00 am - 10:40 am</td>
+        <td><div class="progress-bar"><div class="progress" id="bar-period3"></div></div></td>
     </tr>
     <tr id="period5">
         <td>Period 5</td>
         <td>10:45 am - 11:45 am</td>
+        <td><div class="progress-bar"><div class="progress" id="bar-period5"></div></div></td>
     </tr>
     <tr id="lunch2">
         <td>2nd Lunch</td>
         <td>11:45 am - 12:15 pm</td>
+        <td><div class="progress-bar"><div class="progress" id="bar-lunch2"></div></div></td>
     </tr>
     <tr id="period7">
         <td>Period 7</td>
         <td>12:20 pm - 1:11 pm</td>
+        <td><div class="progress-bar"><div class="progress" id="bar-period7"></div></div></td>
     </tr>
 </table>
 
@@ -97,6 +133,41 @@ function highlightCurrentPeriod() {
     });
 }
 
+function updateProgressBars() {
+    const periods = [
+        {id: "period1", start: "07:00", end: "08:40"},
+        {id: "break", start: "08:40", end: "09:00"},
+        {id: "period3", start: "09:00", end: "10:40"},
+        {id: "period5", start: "10:45", end: "11:45"},
+        {id: "lunch2", start: "11:45", end: "12:15"},
+        {id: "period7", start: "12:20", end: "13:11"},
+    ];
+
+    const now = new Date();
+
+    function parseTime(str) {
+        const [h, m] = str.split(":").map(Number);
+        const d = new Date();
+        d.setHours(h, m, 0, 0);
+        return d;
+    }
+
+    periods.forEach(p => {
+        const start = parseTime(p.start);
+        const end = parseTime(p.end);
+        let pct = 0;
+
+        if (now >= start && now <= end) {
+            pct = ((now - start) / (end - start)) * 100;
+        } else if (now > end) {
+            pct = 100;
+        }
+
+        const bar = document.getElementById("bar-" + p.id);
+        if (bar) bar.style.width = `${pct}%`;
+    });
+}
+
 function updateTimer() {
     const endTime = new Date();
     endTime.setHours(10, 40, 0); // Period 3 ends at 10:40 AM
@@ -113,10 +184,14 @@ function updateTimer() {
     }
 }
 
-setInterval(highlightCurrentPeriod, 60000);
-setInterval(updateTimer, 1000);
+setInterval(() => {
+    highlightCurrentPeriod();
+    updateProgressBars();
+    updateTimer();
+}, 1000);
 
 highlightCurrentPeriod();
+updateProgressBars();
 updateTimer();
 </script>
 
