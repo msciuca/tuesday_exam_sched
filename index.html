@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Hourglass Progress Bar</title>
+<title>Animated Hourglass Progress</title>
 <style>
   body {
     font-family: Arial, sans-serif;
@@ -19,57 +19,121 @@
   h1 {
     margin-bottom: 20px;
   }
-
   .hourglass {
-    width: 120px;
-    height: 240px;
+    width: 140px;
+    height: 280px;
     position: relative;
     clip-path: polygon(
       0% 0%, 100% 0%, 100% 20%, 50% 50%, 100% 80%, 100% 100%, 0% 100%, 0% 80%, 50% 50%, 0% 20%
     );
     background: #444;
-    border: 4px solid #ccc;
+    border: 5px solid #ccc;
     box-sizing: border-box;
     overflow: hidden;
+    filter: drop-shadow(0 0 5px #d35400);
   }
-
-  .progress {
+  .sand {
     position: absolute;
     bottom: 0;
     left: 0;
     width: 100%;
     background: linear-gradient(180deg, #f39c12 0%, #d35400 100%);
-    transition: height 0.5s ease;
+    clip-path: polygon(
+      0% 0%, 100% 0%, 100% 100%, 0% 100%
+    );
+    filter: drop-shadow(0 0 3px #e67e22);
   }
-
+  /* Wave effect on top of sand */
+  .wave {
+    position: absolute;
+    top: -12px;
+    left: 0;
+    width: 140px;
+    height: 20px;
+    background: #e67e22;
+    border-radius: 50% 50% 0 0;
+    filter: drop-shadow(0 0 2px #e67e22);
+    mix-blend-mode: screen;
+  }
+  /* Sand particles */
+  .particle {
+    position: absolute;
+    width: 3px;
+    height: 6px;
+    background: #f39c12;
+    border-radius: 50% / 70%;
+    filter: drop-shadow(0 0 2px #e67e22);
+    opacity: 0.8;
+  }
   .time-label {
-    margin-top: 15px;
+    margin-top: 25px;
     font-size: 18px;
+    font-weight: 600;
   }
 </style>
 </head>
 <body>
+
   <h1>Period 4 Exam Progress</h1>
-  <div class="hourglass">
-    <div class="progress" id="progress"></div>
+  <div class="hourglass" id="hourglass">
+    <div class="sand" id="sand">
+      <div class="wave" id="wave"></div>
+    </div>
   </div>
   <div class="time-label" id="timeLabel">Loading...</div>
 
+  <!-- GSAP CDN -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+
 <script>
-  // Define start and end times of exam in 24-hour format
   const startHour = 8, startMinute = 55;
   const endHour = 10, endMinute = 40;
 
-  function getMinutesSinceMidnight(h, m) {
-    return h * 60 + m;
-  }
-
-  const startTimeMinutes = getMinutesSinceMidnight(startHour, startMinute);
-  const endTimeMinutes = getMinutesSinceMidnight(endHour, endMinute);
+  const startTimeMinutes = startHour * 60 + startMinute;
+  const endTimeMinutes = endHour * 60 + endMinute;
   const totalDuration = endTimeMinutes - startTimeMinutes;
 
-  const progressElem = document.getElementById('progress');
+  const sand = document.getElementById('sand');
+  const wave = document.getElementById('wave');
   const timeLabel = document.getElementById('timeLabel');
+  const hourglass = document.getElementById('hourglass');
+
+  // Animate wave side to side continuously (sand ripple)
+  gsap.to(wave, {
+    duration: 2,
+    x: 10,
+    yoyo: true,
+    repeat: -1,
+    ease: "sine.inOut"
+  });
+
+  // Create sand particle effect
+  function createParticle() {
+    const p = document.createElement('div');
+    p.className = 'particle';
+    hourglass.appendChild(p);
+
+    // Start x randomly inside hourglass width
+    const startX = Math.random() * hourglass.clientWidth * 0.7 + hourglass.clientWidth * 0.15;
+    const startY = 20; // start near neck of hourglass
+
+    // Position particle initially
+    gsap.set(p, { x: startX, y: startY, opacity: 0.8, scale: Math.random() * 0.7 + 0.3 });
+
+    // Animate falling and fading out
+    gsap.to(p, {
+      duration: 2 + Math.random() * 1,
+      y: hourglass.clientHeight - 30,
+      opacity: 0,
+      ease: "power1.in",
+      onComplete: () => p.remove()
+    });
+  }
+
+  // Spawn particles continuously
+  setInterval(() => {
+    createParticle();
+  }, 300);
 
   function updateProgress() {
     const now = new Date();
@@ -87,12 +151,17 @@
       timeLabel.textContent = `Progress: ${progressPercent.toFixed(1)}%`;
     }
 
-    progressElem.style.height = progressPercent + '%';
+    // Animate sand fill height smoothly
+    gsap.to(sand, {
+      duration: 1,
+      height: progressPercent + '%',
+      ease: "power2.out"
+    });
   }
 
-  // Initialize and update every second
   updateProgress();
   setInterval(updateProgress, 1000);
 </script>
+
 </body>
 </html>
