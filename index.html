@@ -1,116 +1,134 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Donut Progress Bar</title>
-<style>
-  body {
-    background: #222;
-    color: #eee;
-    font-family: Arial, sans-serif;
-    height: 100vh;
-    margin: 0;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-  }
-  h1 {
-    margin-bottom: 20px;
-  }
-  svg {
-    transform: rotate(-90deg);
-    width: 160px;
-    height: 160px;
-  }
-  .background-circle {
-    fill: none;
-    stroke: #444;
-    stroke-width: 16;
-  }
-  .progress-circle {
-    fill: none;
-    stroke: #f39c12;
-    stroke-width: 16;
-    stroke-linecap: round;
-    stroke-dasharray: 440;
-    stroke-dashoffset: 440;
-  }
-  .percentage-text {
-    font-size: 32px;
-    font-weight: bold;
-    fill: #f39c12;
-    text-anchor: middle;
-    dominant-baseline: middle;
-    user-select: none;
-  }
-  .time-label {
-    margin-top: 25px;
-    font-size: 18px;
-  }
-</style>
-</head>
-<body>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Diana Ciuca – About</title>
+  <style>
+    /* Import elegant fonts */
+    @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&family=Montserrat:wght@400;500&display=swap');
 
-<h1>Period 4 Exam Progress</h1>
+    /* Base resets */
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Montserrat', sans-serif;
+      color: #555;
+      line-height: 1.8;
+      background: #fff;
+    }
+    a { text-decoration: none; color: inherit; }
 
-<svg viewBox="0 0 150 150">
-  <circle class="background-circle" cx="75" cy="75" r="70"/>
-  <circle class="progress-circle" cx="75" cy="75" r="70"/>
-  <text class="percentage-text" x="75" y="80">0%</text>
-</svg>
+    /* Header/nav */
+    .header {
+      padding: 48px 80px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.4rem;
+      font-weight: 600;
+      letter-spacing: 1px;
+      color: #333;
+    }
+    .nav-links {
+      display: flex;
+      gap: 36px;
+      font-size: 0.95rem;
+      font-weight: 500;
+      letter-spacing: 1px;
+      color: #777;
+    }
+    .nav-links li { list-style: none; }
+    .nav-links a:hover { color: #333; }
 
-<div class="time-label" id="timeLabel">Loading...</div>
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
-<script>
-  const startHour = 8, startMinute = 55;
-  const endHour = 10, endMinute = 40;
-
-  const startTimeMinutes = startHour * 60 + startMinute;
-  const endTimeMinutes = endHour * 60 + endMinute;
-  const totalDuration = endTimeMinutes - startTimeMinutes;
-
-  const progressCircle = document.querySelector('.progress-circle');
-  const percentageText = document.querySelector('.percentage-text');
-  const timeLabel = document.getElementById('timeLabel');
-
-  const circumference = 2 * Math.PI * 70; // 2πr where r=70
-
-  progressCircle.style.strokeDasharray = circumference;
-  progressCircle.style.strokeDashoffset = circumference;
-
-  function updateProgress() {
-    const now = new Date();
-    const currentMinutes = now.getHours() * 60 + now.getMinutes() + now.getSeconds() / 60;
-
-    let progressPercent;
-    if (currentMinutes < startTimeMinutes) {
-      progressPercent = 0;
-      timeLabel.textContent = "Period 4 Exam has not started.";
-    } else if (currentMinutes > endTimeMinutes) {
-      progressPercent = 100;
-      timeLabel.textContent = "Period 4 Exam has ended.";
-    } else {
-      progressPercent = ((currentMinutes - startTimeMinutes) / totalDuration) * 100;
-      timeLabel.textContent = `Progress: ${progressPercent.toFixed(1)}%`;
+    /* Main content container */
+    .container {
+      max-width: 920px;
+      margin: 0 auto;
+      padding: 0 40px;
     }
 
-    const offset = circumference * (1 - progressPercent / 100);
+    /* About section */
+    .about-title {
+      margin-top: 48px;
+      font-family: 'Playfair Display', serif;
+      font-size: 1.1rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: #999;
+    }
+    .content {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 48px;
+      margin: 32px 0 56px;
+    }
+    .content img {
+      width: 100%;
+      height: auto;
+      border-radius: 8px;
+      object-fit: cover;
+    }
+    .content p {
+      margin-bottom: 20px;
+      font-size: 1rem;
+      color: #555;
+    }
 
-    gsap.to(progressCircle, {
-      strokeDashoffset: offset,
-      duration: 1,
-      ease: "power2.out"
-    });
+    /* Separator line */
+    .separator {
+      border: none;
+      border-top: 1px solid #e0e0e0;
+      margin: 0 40px 40px;
+    }
 
-    percentageText.textContent = `${progressPercent.toFixed(1)}%`;
-  }
+    /* Footer icons */
+    .footer {
+      padding: 0 80px 32px;
+      display: flex;
+      justify-content: flex-end;
+      gap: 32px;
+      color: #777;
+      font-size: 1.3rem;
+    }
+    .footer a:hover { color: #333; }
+  </style>
+</head>
+<body>
+  <header class="header">
+    <a href="#" class="logo">Diana Ciuca</a>
+    <ul class="nav-links">
+      <li><a href="#class">Class</a></li>
+      <li><a href="#nonprofit">NonProfit</a></li>
+      <li><a href="#about">About</a></li>
+    </ul>
+  </header>
 
-  updateProgress();
-  setInterval(updateProgress, 1000);
-</script>
+  <main class="container">
+    <h2 class="about-title">About</h2>
+    <div class="content">
+      <div class="text">
+        <p>Hey! I’m Diana. I teach high school engineering in Vegas. I build fun STEM lessons—think 3D prints, Arduino gadgets, and hands-on challenges.</p>
+        <p>I have a Neuroscience degree and a teaching license. I mix tech know‑how with creative lessons. My fave projects? Student‑built seesaws, arcade controllers, and solar ovens.</p>
+        <p>Beyond class, I’m fluent in Fusion 360, Python, and web dev. I snagged two $1,200 grants to upgrade our makerspace fab lab. Now I’m starting a nonprofit to fix up laptops, teach coding skills, and donate to under‑resourced schools.</p>
+        <p>In my free time, I climb Nevada rocks, whip up vegan meals, and snap pics at Rainbow Gardens. Weekends? Exploring Sloan Canyon or plotting my next trip.</p>
+        <p>I’m launching “Organic Mechanic” on YouTube—quick health tips and DIY tech. Stay tuned!</p>
+        <p>Ping me: <a href="mailto:diana.ciuca@example.com">diana.ciuca@example.com</a> or <a href="https://linkedin.com/in/dianaciuca">LinkedIn</a>.</p>
+      </div>
+      <div>
+        <img src="profile.jpg" alt="Diana Ciuca" />
+      </div>
+    </div>
+  </main>
 
+  <hr class="separator" />
+
+  <footer class="footer">
+    <a href="https://linkedin.com/in/dianaciuca" aria-label="LinkedIn">in</a>
+    <a href="mailto:diana.ciuca@example.com" aria-label="Email">✉️</a>
+  </footer>
 </body>
 </html>
