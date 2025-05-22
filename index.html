@@ -7,62 +7,70 @@
   <style>
     /* Basic Reset */
     * { margin: 0; padding: 0; box-sizing: border-box; }
+    html, body { height: 100%; }
     body {
       font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
       color: #333;
       background: #fdfdfd;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
       padding: 20px;
     }
     h1 {
       text-align: center;
-      margin-bottom: 16px;
-      font-size: 1.5rem;
+      margin-bottom: 24px;
+      font-size: 2.5rem;
     }
     .schedule {
-      max-width: 500px;
-      margin: 0 auto;
+      width: 100%;
+      max-width: 900px;
       border: 1px solid #ccc;
-      border-radius: 4px;
+      border-radius: 6px;
       overflow: hidden;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
     }
     .schedule-header {
       background: #b00000;
       color: #fff;
       text-align: center;
-      padding: 12px 0;
+      padding: 16px 0;
       font-weight: bold;
+      font-size: 1.25rem;
     }
     .schedule-subheader {
       background: #eee;
       text-align: center;
-      padding: 8px 0;
-      font-size: 0.9rem;
+      padding: 12px 0;
+      font-size: 1rem;
       color: #555;
     }
     /* Progress bar container */
     .progress-container {
       background: #e0e0e0;
-      height: 12px;
-      margin: 16px;
-      border-radius: 6px;
+      height: 24px;
+      margin: 24px 32px;
+      border-radius: 12px;
       overflow: hidden;
     }
     .progress-bar {
       height: 100%;
       background: #b00000;
-      width: 0%; /* adjust with JS or set static */
+      width: 0%; /* JS will set */
       transition: width 0.3s ease;
     }
     .schedule-table {
       width: 100%;
       border-collapse: collapse;
+      margin-bottom: 16px;
     }
     .schedule-table th,
     .schedule-table td {
       border: 1px solid #ddd;
-      padding: 12px;
+      padding: 16px;
       text-align: left;
-      font-size: 0.95rem;
+      font-size: 1.1rem;
     }
     .schedule-table th {
       background: #f9f9f9;
@@ -76,9 +84,8 @@
     <div class="schedule-header">Thursday</div>
     <div class="schedule-subheader">5/22/25 — Half Day</div>
 
-    <!-- progress bar: 0% to 100%, set width below -->
     <div class="progress-container">
-      <div class="progress-bar" style="width: 50%;"></div>
+      <div id="progressBar" class="progress-bar"></div>
     </div>
 
     <table class="schedule-table">
@@ -96,5 +103,24 @@
       </tbody>
     </table>
   </section>
+
+  <script>
+    // Calculate and set progress based on current time
+    (function() {
+      const now = new Date();
+      // Create today’s start/end times
+      const start = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 7, 0, 0);
+      const end = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 8, 45, 0);
+      let percent;
+      if (now <= start) {
+        percent = 0;
+      } else if (now >= end) {
+        percent = 100;
+      } else {
+        percent = ((now - start) / (end - start)) * 100;
+      }
+      document.getElementById('progressBar').style.width = percent + '%';
+    })();
+  </script>
 </body>
 </html>
