@@ -29,6 +29,7 @@
       border-radius: 6px;
       overflow: hidden;
       box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      margin-bottom: 16px;
     }
     .schedule-header {
       background: #b00000;
@@ -76,6 +77,14 @@
       background: #f9f9f9;
       color: #333;
     }
+    /* Clock styling */
+    #clock {
+      font-size: 2rem;
+      margin-top: 8px;
+      color: #333;
+      font-weight: bold;
+      text-align: center;
+    }
   </style>
 </head>
 <body>
@@ -104,6 +113,9 @@
     </table>
   </section>
 
+  <!-- Live clock -->
+  <div id="clock"></div>
+
   <script>
     function updateProgress() {
       const now = new Date();
@@ -121,10 +133,22 @@
       document.getElementById('progressBar').style.width = percent + '%';
     }
 
-    // initial update
+    function updateClock() {
+      const now = new Date();
+      const hours = now.getHours().toString().padStart(2, '0');
+      const minutes = now.getMinutes().toString().padStart(2, '0');
+      const seconds = now.getSeconds().toString().padStart(2, '0');
+      document.getElementById('clock').textContent = `${hours}:${minutes}:${seconds}`;
+    }
+
+    // initial calls
     updateProgress();
+    updateClock();
     // update every second
-    setInterval(updateProgress, 1000);
+    setInterval(() => {
+      updateProgress();
+      updateClock();
+    }, 1000);
   </script>
 </body>
 </html>
