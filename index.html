@@ -97,8 +97,8 @@
       </thead>
       <tbody>
         <tr>
-          <td>Period 5 Exam</td>
-          <td>7:00 am – 8:45 am</td>
+          <td>Period 7 Exam</td>
+          <td>8:55 am – 10:40 am</td>
         </tr>
       </tbody>
     </table>
@@ -107,9 +107,9 @@
   <script>
     function updateProgress() {
       const now = new Date();
-      // Today’s exam window
-      const start = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 7, 0, 0);
-      const end   = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 8, 45, 0);
+      // Exam window for Period 7
+      const start = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 8, 55, 0);
+      const end   = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 10, 40, 0);
       let percent;
       if (now <= start) {
         percent = 0;
@@ -121,9 +121,9 @@
       document.getElementById('progressBar').style.width = percent + '%';
     }
 
-    // update once immediately…
+    // initial update
     updateProgress();
-    // …then update every second
+    // update every second
     setInterval(updateProgress, 1000);
   </script>
 </body>
