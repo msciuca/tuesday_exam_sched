@@ -3,9 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Thursday Schedule</title>
+  <title>Friday Schedule</title>
   <style>
-    /* Basic Reset */
     * { margin: 0; padding: 0; box-sizing: border-box; }
     html, body { height: 100%; }
     body {
@@ -32,7 +31,7 @@
       margin-bottom: 16px;
     }
     .schedule-header {
-      background: #b00000;
+      background: #1a1a1a;
       color: #fff;
       text-align: center;
       padding: 16px 0;
@@ -40,13 +39,12 @@
       font-size: 1.5rem;
     }
     .schedule-subheader {
-      background: #eee;
+      background: #d3d3d3;
       text-align: center;
       padding: 12px 0;
       font-size: 1rem;
-      color: #555;
+      color: #000;
     }
-    /* Progress bar container */
     .progress-container {
       background: #e0e0e0;
       height: 32px;
@@ -57,7 +55,7 @@
     }
     .progress-bar {
       height: 100%;
-      background: #b00000;
+      background: #1a1a1a;
       width: 0%;
       transition: width 0.5s ease;
     }
@@ -77,7 +75,6 @@
       background: #f9f9f9;
       color: #333;
     }
-    /* Clock styling */
     #clock {
       font-size: 2rem;
       margin-top: 8px;
@@ -88,10 +85,10 @@
   </style>
 </head>
 <body>
-  <h1>Thursday Schedule</h1>
+  <h1>Friday Schedule</h1>
   <section class="schedule">
-    <div class="schedule-header">Thursday</div>
-    <div class="schedule-subheader">5/22/25 — Half Day</div>
+    <div class="schedule-header">Friday</div>
+    <div class="schedule-subheader">5/23/25 — Half Day</div>
 
     <div class="progress-container">
       <div id="progressBar" class="progress-bar"></div>
@@ -100,55 +97,3 @@
     <table class="schedule-table">
       <thead>
         <tr>
-          <th>Period</th>
-          <th>Time</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>Period 7 Exam</td>
-          <td>8:55 am – 10:40 am</td>
-        </tr>
-      </tbody>
-    </table>
-  </section>
-
-  <!-- Live clock -->
-  <div id="clock"></div>
-
-  <script>
-    function updateProgress() {
-      const now = new Date();
-      // Exam window for Period 7
-      const start = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 8, 55, 0);
-      const end   = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 10, 40, 0);
-      let percent;
-      if (now <= start) {
-        percent = 0;
-      } else if (now >= end) {
-        percent = 100;
-      } else {
-        percent = ((now - start) / (end - start)) * 100;
-      }
-      document.getElementById('progressBar').style.width = percent + '%';
-    }
-
-    function updateClock() {
-      const now = new Date();
-      const hours = now.getHours().toString().padStart(2, '0');
-      const minutes = now.getMinutes().toString().padStart(2, '0');
-      const seconds = now.getSeconds().toString().padStart(2, '0');
-      document.getElementById('clock').textContent = `${hours}:${minutes}:${seconds}`;
-    }
-
-    // initial calls
-    updateProgress();
-    updateClock();
-    // update every second
-    setInterval(() => {
-      updateProgress();
-      updateClock();
-    }, 1000);
-  </script>
-</body>
-</html>
